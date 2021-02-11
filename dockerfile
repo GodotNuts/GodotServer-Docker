@@ -27,4 +27,4 @@ RUN wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${G
 RUN mkdir /godotapp
 WORKDIR /godotapp
 RUN git clone ${HTTPS_GIT_REPO} .
-RUN godot --main-pack ${GODOT_GAME_NAME}.pck
+ONBUILD RUN godot --main-pack ${GODOT_GAME_NAME}.pck
