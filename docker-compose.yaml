@@ -7,6 +7,4 @@ services:
       - "12345:12345"
       - "12345:12345/udp"
     tty: true
-    volumes:
-      - ./context:/context
     container_name: godot-server
