@@ -1,11 +1,12 @@
 FROM alpine:latest
 
-# Variables
+# Environment Variables
 ENV GODOT_VERSION "3.2.3"
+ENV GODOT_EXPORT_PRESET="Linux/X11"
 ENV GODOT_GAME_NAME ""
 ENV HTTPS_GIT_REPO ""
 
-# Updates and installs
+# Updates and installs to the server
 RUN apk update
 RUN apk add --no-cache bash
 RUN apk add --no-cache wget
@@ -27,9 +28,17 @@ RUN wget https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${G
     && mv templates/* ~/.local/share/godot/templates/${GODOT_VERSION}.stable \
     && rm -f Godot_v${GODOT_VERSION}-stable_export_templates.tpz Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip
 
-# Make directory to run the app from
+# Make needed directories for container
 RUN mkdir /godotapp
-WORKDIR /godotapp
+RUN mkdir /godotbuildspace
+
+# Move to the build space and export the .pck
+WORKDIR /godotbuildspace
 RUN git clone ${HTTPS_GIT_REPO} .
-RUN godot --path . --export-pack "Linux/X11" ${GODOT_GAME_NAME}.pck
+RUN godot --path /godotbuildspace --export-pack ${GODOT_EXPORT_PRESET} ${GODOT_GAME_NAME}.pck
+RUN mv ${GODOT_GAME_NAME}.pck /godotapp/
+
+# Change to the godotapp space, delete the source,  and run the app
+WORKDIR /godotapp
+run rm -f -R /godotbuildspace
 CMD godot --main-pack ${GODOT_GAME_NAME}.pck
