@@ -2,6 +2,10 @@
 
 A repo with everything needed to spin up a Godot Server in Docker using Alpine Linux
 
+## :speech_balloon: Discord
+
+https://discord.gg/xXKYN2ZxDB
+
 ## :coffee: Contributors
 
 - [Chuck Lindblom](https://github.com/BearDooks) (Creator)
